@@ -11,9 +11,9 @@ from rest_framework.generics import (
 )
 
 from materials.models import Course, Lesson
-from users.models import Payments
+from users.models import Payments, User
 from users.serializers import (
-    PaymentsSerializer,
+    PaymentsSerializer, UserSerializer,
 )
 
 
@@ -23,3 +23,13 @@ class PaymentsViewSet(ModelViewSet):
     filterset_fields = ["course", "lesson", "payment_method"]
     filter_backends = [OrderingFilter, DjangoFilterBackend]
     ordering_fields = ["payment_date"]
+
+
+class UserCreateAPIView(CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def perform_create(self, serializer):
+        user = serializer.save(is_active=True)
+        user.set_password(user.password)
+        user.save()
