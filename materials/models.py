@@ -28,6 +28,9 @@ class Course(models.Model):
         verbose_name="Описание курса",
         help_text="Введите описание курса",
     )
+    owner = models.ForeignKey(
+        User, verbose_name="Владелец", blank=True, null=True, on_delete=models.SET_NULL
+    )
 
     def __str__(self):
         return self.name
@@ -93,7 +96,7 @@ class Lesson(models.Model):
 
     class Meta:
         verbose_name = "Урок"
-        verbose_name_plural = "Урока"
+        verbose_name_plural = "Уроки"
 
 
 """        permissions = [

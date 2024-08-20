@@ -5,9 +5,9 @@ from materials.apps import MaterialsConfig
 from materials.views import (
     CourseViewSet,
     LessonCreateApiView,
-    LessonRetrieveApiView,
-    LessonListApiView,
     LessonDestroyApiView,
+    LessonListApiView,
+    LessonRetrieveApiView,
     LessonUpdateApiView,
 )
 

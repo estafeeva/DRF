@@ -1,22 +1,24 @@
-from django.urls import path
+from django.contrib import admin
+from django.urls import include, path
 from rest_framework.permissions import AllowAny
 from rest_framework.routers import SimpleRouter
-from django.contrib import admin
-from django.urls import path, include
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 from users.apps import UsersConfig
-from users.views import (
-    PaymentsViewSet,
-)
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
-from users.views import UserCreateAPIView
+from users.views import PaymentsViewSet, UserCreateAPIView
 
 urlpatterns = [
-    path('register/', UserCreateAPIView.as_view(), name='register'),
-    path('login/', TokenObtainPairView.as_view(permission_classes=(AllowAny,)), name='login'),
-    path('token/refresh/', TokenRefreshView.as_view(permission_classes=(AllowAny,)), name='token_refresh'),
+    path("register/", UserCreateAPIView.as_view(), name="register"),
+    path(
+        "login/",
+        TokenObtainPairView.as_view(permission_classes=(AllowAny,)),
+        name="login",
+    ),
+    path(
+        "token/refresh/",
+        TokenRefreshView.as_view(permission_classes=(AllowAny,)),
+        name="token_refresh",
+    ),
 ]
 
 app_name = UsersConfig.name
@@ -27,5 +29,3 @@ router.register("payments", PaymentsViewSet)
 """urlpatterns = []
 
 urlpatterns += router.urls"""
-
-

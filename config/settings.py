@@ -1,6 +1,7 @@
+import os
 from datetime import timedelta
 from pathlib import Path
-import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -25,7 +26,6 @@ INSTALLED_APPS = [
     "users",
     "django_filters",
     "rest_framework_simplejwt",
-
 ]
 
 MIDDLEWARE = [
@@ -65,7 +65,7 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
-    ]
+    ],
 }
 
 DATABASES = {
