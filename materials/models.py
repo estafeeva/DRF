@@ -108,3 +108,29 @@ class Lesson(models.Model):
 
 """Урок и курс - это связанные между собой сущности.
 Уроки складываются в курс, в одном курсе может быть много уроков."""
+
+
+class Subscription(models.Model):
+    """Подписка:
+    пользователь,
+    курс."""
+
+    user = models.ForeignKey(
+        User, verbose_name="Пользователь", blank=True, null=True, on_delete=models.SET_NULL
+    )
+
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.SET_NULL,
+        verbose_name="Курс",
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        return f'Subscription: {self.pk} (Пользователь {self.user} подписан на курс {self.course})'
+
+
+    class Meta:
+        verbose_name = 'подписка'
+        verbose_name_plural = 'подписки'
