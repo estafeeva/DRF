@@ -26,14 +26,22 @@ class CourseSerializer(serializers.ModelSerializer):
 class CourseDetailSerializer(serializers.ModelSerializer):
     lessons = LessonSerializer(read_only=True, many=True)
     count_lessons_in_course = serializers.SerializerMethodField(read_only=True)
+    is_user_subscript = serializers.SerializerMethodField(read_only=True)
 
     def get_count_lessons_in_course(self, instance):
         return instance.lessons.count()
         # return Course.objects.filter(lessons=course.lesson).count()
 
+    def get_is_user_subscript(self, instance):
+        """
+        Информация, подписан пользователь на обновления курса или нет.
+        """
+        a = Subscription.objects.filter(course=instance).filter(user=self.context["request"].user)
+        return a.exists()
+
     class Meta:
         model = Course
-        fields = ("name", "description", "count_lessons_in_course", "lessons")
+        fields = ("name", "description", "count_lessons_in_course", "lessons", "is_user_subscript")
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):

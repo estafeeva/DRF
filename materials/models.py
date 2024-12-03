@@ -116,15 +116,13 @@ class Subscription(models.Model):
     курс."""
 
     user = models.ForeignKey(
-        User, verbose_name="Пользователь", blank=True, null=True, on_delete=models.SET_NULL
+        User, verbose_name="Пользователь", on_delete=models.CASCADE
     )
 
     course = models.ForeignKey(
         Course,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         verbose_name="Курс",
-        null=True,
-        blank=True,
     )
 
     def __str__(self):
