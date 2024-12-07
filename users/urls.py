@@ -24,8 +24,5 @@ urlpatterns = [
 app_name = UsersConfig.name
 
 router = SimpleRouter()
-router.register("payments", PaymentsViewSet)
-
-"""urlpatterns = []
-
-urlpatterns += router.urls"""
+router.register("payments", PaymentsViewSet, basename="payments")
+urlpatterns += router.urls

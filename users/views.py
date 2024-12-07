@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework.generics import (
@@ -14,6 +15,11 @@ from rest_framework.viewsets import ModelViewSet
 from materials.models import Course, Lesson
 from users.models import Payments, User
 from users.serializers import PaymentsSerializer, UserSerializer
+from users.services import (
+    create_stripe_product,
+    create_stripe_price,
+    create_stripe_session,
+)
 
 
 class PaymentsViewSet(ModelViewSet):
@@ -22,6 +28,20 @@ class PaymentsViewSet(ModelViewSet):
     filterset_fields = ["course", "lesson", "payment_method"]
     filter_backends = [OrderingFilter, DjangoFilterBackend]
     ordering_fields = ["payment_date"]
+
+    def perform_create(self, serializer):
+        success_url = "http://127.0.0.1:8000/" + reverse_lazy("users:payments-list")
+
+        payment = serializer.save()
+        payment.owner = self.request.user
+        stripe_product = create_stripe_product(payment)
+        stripe_price = create_stripe_price(stripe_product, payment.payment_sum)
+        stripe_session = create_stripe_session(stripe_price, success_url)
+
+        payment.payment_link = stripe_session.get("url")
+        payment.session_id = stripe_session.get("id")
+
+        payment.save()
 
 
 class UserCreateAPIView(CreateAPIView):

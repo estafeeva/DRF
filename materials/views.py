@@ -4,7 +4,8 @@ from rest_framework.generics import (
     DestroyAPIView,
     ListAPIView,
     RetrieveAPIView,
-    UpdateAPIView, get_object_or_404,
+    UpdateAPIView,
+    get_object_or_404,
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -16,7 +17,8 @@ from materials.paginations import CustomPagination
 from materials.serializers import (
     CourseDetailSerializer,
     CourseSerializer,
-    LessonSerializer, SubscriptionSerializer,
+    LessonSerializer,
+    SubscriptionSerializer,
 )
 from users.models import Payments
 from users.permissions import IsModer, IsOwner
@@ -87,14 +89,14 @@ class SubscriptionAPIView(APIView):
 
     def post(self, *args, **kwargs):
         user = self.request.user
-        course_id = self.request.data.get('course')
+        course_id = self.request.data.get("course")
         course = get_object_or_404(Course, pk=course_id)
         subs_item = Subscription.objects.all().filter(user=user).filter(course=course)
 
         if subs_item.exists():
             subs_item.delete()
-            message = 'Подписка отключена'
+            message = "Подписка отключена"
         else:
             Subscription.objects.create(user=user, course=course)
-            message = 'Подписка включена'
+            message = "Подписка включена"
         return Response({"message": message})

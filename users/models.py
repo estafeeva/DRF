@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -66,7 +68,9 @@ class Payments(models.Model):
     owner = models.ForeignKey(
         User, verbose_name="пользователь", on_delete=models.CASCADE
     )
-    payment_date = models.DateField(verbose_name="дата оплаты")
+    payment_date = models.DateField(
+        default=datetime.datetime.today().date(), verbose_name="дата оплаты"
+    )
     lesson = models.ForeignKey(
         "materials.Lesson",
         blank=True,
@@ -85,6 +89,22 @@ class Payments(models.Model):
     payment_sum = models.PositiveIntegerField(verbose_name="сумма оплаты")
     payment_method = models.CharField(
         max_length=50, choices=payment_method_var, verbose_name="способ оплаты"
+    )
+    session_id = models.CharField(
+        max_length=250,
+        blank=True,
+        null=True,
+        verbose_name="ID сессии",
+        help_text="Укажите ID сессии",
+        # on_delete=models.CASCADE,
+    )
+    payment_link = models.URLField(
+        max_length=400,
+        blank=True,
+        null=True,
+        verbose_name="ссылка на оплату",
+        help_text="Укажите ссылку на оплату",
+        # on_delete=models.CASCADE,
     )
 
     class Meta:

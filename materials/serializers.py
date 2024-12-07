@@ -7,6 +7,7 @@ from users.models import Payments
 
 class LessonSerializer(serializers.ModelSerializer):
     video_link = serializers.CharField(validators=[validate_link])
+
     class Meta:
         model = Lesson
         fields = "__all__"
@@ -36,12 +37,20 @@ class CourseDetailSerializer(serializers.ModelSerializer):
         """
         Информация, подписан пользователь на обновления курса или нет.
         """
-        a = Subscription.objects.filter(course=instance).filter(user=self.context["request"].user)
+        a = Subscription.objects.filter(course=instance).filter(
+            user=self.context["request"].user
+        )
         return a.exists()
 
     class Meta:
         model = Course
-        fields = ("name", "description", "count_lessons_in_course", "lessons", "is_user_subscript")
+        fields = (
+            "name",
+            "description",
+            "count_lessons_in_course",
+            "lessons",
+            "is_user_subscript",
+        )
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):

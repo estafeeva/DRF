@@ -126,9 +126,8 @@ class Subscription(models.Model):
     )
 
     def __str__(self):
-        return f'Subscription: {self.pk} (Пользователь {self.user} подписан на курс {self.course})'
-
+        return f"Subscription: {self.pk} (Пользователь {self.user} подписан на курс {self.course})"
 
     class Meta:
-        verbose_name = 'подписка'
-        verbose_name_plural = 'подписки'
+        verbose_name = "подписка"
+        verbose_name_plural = "подписки"
