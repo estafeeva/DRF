@@ -22,6 +22,7 @@ from materials.serializers import (
 )
 from users.models import Payments
 from users.permissions import IsModer, IsOwner
+from materials.tasks import send_letter_updates_for_users
 
 
 class CourseViewSet(ModelViewSet):
@@ -37,6 +38,10 @@ class CourseViewSet(ModelViewSet):
         course = serializer.save()
         course.owner = self.request.user
         course.save()
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        send_letter_updates_for_users.delay(instance.pk)
 
     """def get_permissions(self):
         if self.action == "create":
